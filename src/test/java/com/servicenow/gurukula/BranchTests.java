@@ -52,6 +52,7 @@ public class BranchTests {
         mypage.checkAutomaticLogin(true);
         HomePage x = mypage.submitValidLogin();
         BranchPage y = (BranchPage)x.selectEntitiesDropDown("Branch");
+        y.deleteBranch("Palo Alto");
 
         // Assert.assertTrue(mypage.loginBad(),"Fail: Login was suppose to fail and it did not.");
     }
