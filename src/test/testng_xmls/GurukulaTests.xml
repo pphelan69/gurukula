@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<suite name="The Gurukula Tests" parallel="methods" thread-count="1">
+
+    <test name="Login Tests" preserve-order="true">
+        <classes>
+            <class name="com.servicenow.gurukula.LoginTests"/>
+            <methods>
+                <include name="inValidLoginUserNameTest"/>
+                <include name="inValidLoginPasswordTest"/>
+                <include name="validLoginTest"/>
+            </methods>
+        </classes>
+    </test>
+</suite>
