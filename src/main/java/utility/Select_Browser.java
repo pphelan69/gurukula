@@ -25,12 +25,19 @@ public class Select_Browser {
             System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
             driver = new ChromeDriver();
         }
-        else if(Browser.equals("FireFox"))
-        {
-            File file = new File("src/main/resources/drivers/geckodriver");
-            System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
+        else if(Browser.equals("FireFox")) {
+            if (System.getProperty("os.name").contains("Windows")) {
+                File file = new File("src/main/resources/drivers/geckodriver.exe");
+                System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
+            }
+            else{
+                File file = new File("src/main/resources/drivers/geckodriver");
+                System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
+            }
+
             driver =new FirefoxDriver();
         }
+
 
         return driver;
     }
