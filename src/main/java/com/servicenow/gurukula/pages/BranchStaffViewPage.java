@@ -9,34 +9,28 @@ import java.util.List;
 /**
  * Created by pphelan on 11/14/16.
  */
-public class BranchViewPage extends GurukulaPage {
+public class BranchStaffViewPage extends GurukulaPage {
 
     By branchDetails    = By.cssSelector(".input-sm.form-control");
     By backBtn          = By.cssSelector(".btn.btn-info");
 
 
-    public BranchViewPage(WebDriver driver) {
-
+    public BranchStaffViewPage(WebDriver driver) {
         super(driver);
-
-        if (!driver.getCurrentUrl().contains("branch")) {
-            throw new IllegalStateException("Error: not on the branch view page");
-        }
-
     }
 
 
-    public String getBranchName() {
+    public String getName() {
         List<WebElement> tr_collection = driver.findElements(branchDetails);
         return tr_collection.get(0).getAttribute("value");
     }
 
-    public String getBranchCode() {
+    public String getCode() {
         List<WebElement> tr_collection = driver.findElements(branchDetails);
         return tr_collection.get(1).getAttribute("value");
     }
 
-    public BranchPage clickBack() {
+    public BranchStaffPage clickBack() {
         WebElement backButton = driver.findElement(backBtn);
         backButton.click();
         try {
@@ -44,7 +38,7 @@ public class BranchViewPage extends GurukulaPage {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return new BranchPage(driver);
+        return new BranchStaffPage(driver);
     }
 }
 

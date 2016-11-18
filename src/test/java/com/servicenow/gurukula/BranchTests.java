@@ -34,163 +34,146 @@ public class BranchTests {
     @AfterMethod
     public void tearDown() throws Exception {
         System.out.println("In the teardown.");
+
+        // Remove all branches
+        driver.getCurrentUrl();
+        BranchStaffPage branchstaffpage = new BranchStaffPage(driver);
+        for(String branch : branchstaffpage.getBranchOrStaffList()) {
+            System.out.println(branch);
+            BranchStaffDeleteConfirmDialog deleteconfirmpage = branchstaffpage.deleteBranchOrStaff(branch);
+            deleteconfirmpage.clickDelete();
+        }
+
+        // Clear cookies and shutdown browser
         driver.manage().deleteAllCookies();
         driver.quit();
     }
 
 
-    @Test(description="Testing branch creation using a branch name with 1 character to confirm I get error message.")
+
+    @Test(description="Testing branch creation using a branch name with 1 character to confirm we get error message.")
     public void branchNameTest1() {
         driver.get(baseUrl);
-        HomePage startPage = new HomePage(driver);
-        LoginPage mypage = startPage.clickLoginLink();
-        mypage.typeUsername("admin");
-        mypage.typePassword("admin");
-        mypage.checkAutomaticLogin(true);
-        HomePage x = mypage.submitValidLogin();
-        BranchPage branchPage1 = (BranchPage) x.selectEntitiesDropDown("Branch");
-        BranchCreateEditDialog branchDialog1 = branchPage1.clickCreateBranchBtn();
-        branchDialog1.setBranchName("S");
-        branchDialog1.setBranchCode("1001");
-        branchDialog1.getFieldLengthError();
+        HomePage homepage = new HomePage(driver);
+        LoginPage loginpage = homepage.clickLoginLink();
+        loginpage.typeUsername("admin");
+        loginpage.typePassword("admin");
+        loginpage.checkAutomaticLogin(true);
+        HomePage homepage2 = loginpage.submitValidLogin();
+        BranchStaffPage branchstaffpage = (BranchStaffPage) homepage2.selectEntitiesDropDown("Branch");
+        BranchStaffCreateEditDialog branchstaffdialog = branchstaffpage.clickCreateBranchBtn();
+        branchstaffdialog.setBranchName("S");
+        branchstaffdialog.setBranchCode("1001");
 
+        String actual = branchstaffdialog.getFieldLengthError();
         String expected = "This field is required to be at least 5 characters.";
-        String actual = branchDialog1.getFieldLengthError();
-
+        branchstaffdialog.clickCancel();
         Assert.assertEquals(actual,expected, "Error: Branch name length error not displayed.");
     }
 
-    @Test(description="Testing branch creation using a branch name with invalid character to confirm I get error message.")
+    @Test(description="Testing branch creation using a branch name with invalid character to confirm we get error message.")
     public void branchNameTest2() {
         driver.get(baseUrl);
-        HomePage startPage = new HomePage(driver);
-        LoginPage mypage = startPage.clickLoginLink();
-        mypage.typeUsername("admin");
-        mypage.typePassword("admin");
-        mypage.checkAutomaticLogin(true);
-        HomePage x = mypage.submitValidLogin();
-        BranchPage branchPage1 = (BranchPage) x.selectEntitiesDropDown("Branch");
-        BranchCreateEditDialog branchDialog1 = branchPage1.clickCreateBranchBtn();
-        branchDialog1.setBranchName("%");
-        branchDialog1.setBranchCode("1001");
-        branchDialog1.getFieldLengthError();
+        HomePage homepage = new HomePage(driver);
+        LoginPage loginpage = homepage.clickLoginLink();
+        loginpage.typeUsername("admin");
+        loginpage.typePassword("admin");
+        loginpage.checkAutomaticLogin(true);
+        HomePage homepage2 = loginpage.submitValidLogin();
+        BranchStaffPage branchstaffpage = (BranchStaffPage) homepage2.selectEntitiesDropDown("Branch");
+        BranchStaffCreateEditDialog branchstaffdialog = branchstaffpage.clickCreateBranchBtn();
+        branchstaffdialog.setBranchName("%");
+        branchstaffdialog.setBranchCode("1001");
 
-        String expected = "This field should follow pattern ^[a-zA-Z\\s]*$";
-        String actual = branchDialog1.getFieldPatternError();
-
-        Assert.assertEquals(actual,expected, "Error: Branch name, allowed characters error not displayed.");
-    }
-
-
-    @Test(description="Testing branch creation using a branch code with 1 character to confirm I get error message.")
-    public void branchCodeTest1() {
-        driver.get(baseUrl);
-        HomePage startPage = new HomePage(driver);
-        LoginPage mypage = startPage.clickLoginLink();
-        mypage.typeUsername("admin");
-        mypage.typePassword("admin");
-        mypage.checkAutomaticLogin(true);
-        HomePage x = mypage.submitValidLogin();
-        BranchPage branchPage1 = (BranchPage) x.selectEntitiesDropDown("Branch");
-        BranchCreateEditDialog branchDialog1 = branchPage1.clickCreateBranchBtn();
-        branchDialog1.setBranchName("San Jose");
-        branchDialog1.setBranchCode("1");
-        branchDialog1.getFieldLengthError();
-
-        String expected = "This field is required to be at least 2 characters.";
-        String actual = branchDialog1.getFieldLengthError();
-
-        Assert.assertEquals(actual,expected, "Error: Branch code length error not displayed.");
-    }
-
-    @Test(description="Testing branch creation using a branch name with invalid character to confirm I get error message.")
-    public void branchCodeTest2() {
-        driver.get(baseUrl);
-        HomePage startPage = new HomePage(driver);
-        LoginPage mypage = startPage.clickLoginLink();
-        mypage.typeUsername("admin");
-        mypage.typePassword("admin");
-        mypage.checkAutomaticLogin(true);
-        HomePage x = mypage.submitValidLogin();
-        BranchPage branchPage1 = (BranchPage) x.selectEntitiesDropDown("Branch");
-        BranchCreateEditDialog branchDialog1 = branchPage1.clickCreateBranchBtn();
-        branchDialog1.setBranchName("%");
-        branchDialog1.setBranchCode("1001");
-        branchDialog1.getFieldLengthError();
-
-        String expected = "This field should follow pattern ^[a-zA-Z\\s]*$";
-        String actual = branchDialog1.getFieldPatternError();
+        String actual = branchstaffdialog.getFieldPatternError();
+        String expected = "This field should follow pattern ^[a-zA-Z\\s]*$.";
 
         Assert.assertEquals(actual,expected, "Error: Branch name, allowed characters error not displayed.");
     }
+
+
 
 
     @Test(description="Testing branch creation.")
-    public void createBranchTest2() {
+    public void createBranchTest1() {
         driver.get(baseUrl);
-        HomePage startPage = new HomePage(driver);
-        LoginPage mypage = startPage.clickLoginLink();
-        mypage.typeUsername("admin");
-        mypage.typePassword("admin");
-        mypage.checkAutomaticLogin(true);
-        HomePage x = mypage.submitValidLogin();
-        BranchPage branchPage1 = (BranchPage) x.selectEntitiesDropDown("Branch");
-        BranchCreateEditDialog branchDialog1 = branchPage1.clickCreateBranchBtn();
-        branchDialog1.setBranchName("Santa Clara");
-        branchDialog1.setBranchCode("1002");
-        BranchPage branchPage2 = branchDialog1.clickSave();
-        Assert.assertEquals(branchPage2.branchExists("Santa Clara"), true, "Error: Branch not created.");
+        HomePage homepage = new HomePage(driver);
+        LoginPage loginpage = homepage.clickLoginLink();
+        loginpage.typeUsername("admin");
+        loginpage.typePassword("admin");
+        loginpage.checkAutomaticLogin(true);
+        HomePage homepage2 = loginpage.submitValidLogin();
+        BranchStaffPage branchstaffpage = (BranchStaffPage) homepage2.selectEntitiesDropDown("Branch");
+        BranchStaffCreateEditDialog branchstaffdialog = branchstaffpage.clickCreateBranchBtn();
+        branchstaffdialog.setBranchName("Santa Clara");
+        branchstaffdialog.setBranchCode("1000");
+        BranchStaffPage branchstaffpage2 = branchstaffdialog.clickSave();
+        Assert.assertEquals(branchstaffpage2.branchOrStaffExists("Santa Clara"), true, "Error: Branch not created.");
     }
 
-    @Test(description="Testing branch deletion.")
-    public void deleteBranchTest() {
+    @Test(description="Testing branch creation and deletion.")
+    public void deleteBranchTest1() {
         driver.get(baseUrl);
-        HomePage startPage = new HomePage(driver);
-        LoginPage mypage = startPage.clickLoginLink();
-        mypage.typeUsername("admin");
-        mypage.typePassword("admin");
-        mypage.checkAutomaticLogin(true);
-        HomePage x = mypage.submitValidLogin();
-        BranchPage branchPage1 = (BranchPage) x.selectEntitiesDropDown("Branch");
-        BranchCreateEditDialog branchDialog = branchPage1.clickCreateBranchBtn();
-        branchDialog.setBranchName("San Jose");
-        branchDialog.setBranchCode("1001");
-        BranchPage branchPage2 = branchDialog.clickSave();
-        Assert.assertEquals(branchPage2.branchExists("San Jose"), true, "Error: Branch not created.");
+        HomePage homepage = new HomePage(driver);
+        LoginPage loginpage = homepage.clickLoginLink();
+        loginpage.typeUsername("admin");
+        loginpage.typePassword("admin");
+        loginpage.checkAutomaticLogin(true);
+        HomePage homepage2 = loginpage.submitValidLogin();
+        BranchStaffPage branchstaffpage = (BranchStaffPage) homepage2.selectEntitiesDropDown("Branch");
+        BranchStaffCreateEditDialog branchstaffdialog = branchstaffpage.clickCreateBranchBtn();
+        branchstaffdialog.setBranchName("Santa Clara");
+        branchstaffdialog.setBranchCode("1001");
+        BranchStaffPage branchstaffpage2 = branchstaffdialog.clickSave();
+        BranchStaffDeleteConfirmDialog deleteconfirmpage = branchstaffpage2.deleteBranchOrStaff("Santa Clara");
+        BranchStaffPage branchstaffpage3 = deleteconfirmpage.clickDelete();
+        Assert.assertEquals(branchstaffpage3.branchOrStaffExists("San Jose"),false, "Error: Branch exists after deletion.");
 
     }
 
 
-    @Test(description="Testing branch deletion.")
-    public void sampleTest() {
+    @Test(description="Testing branch creation and view.")
+    public void viewBranchTest1() {
         driver.get(baseUrl);
-        HomePage startPage = new HomePage(driver);
-        LoginPage mypage = startPage.clickLoginLink();
-        mypage.typeUsername("admin");
-        mypage.typePassword("admin");
-        mypage.checkAutomaticLogin(true);
-        HomePage x = mypage.submitValidLogin();
+        HomePage homepage = new HomePage(driver);
+        LoginPage loginpage = homepage.clickLoginLink();
+        loginpage.typeUsername("admin");
+        loginpage.typePassword("admin");
+        loginpage.checkAutomaticLogin(true);
+        HomePage homepage2 = loginpage.submitValidLogin();
+        BranchStaffPage branchstaffpage = (BranchStaffPage) homepage2.selectEntitiesDropDown("Branch");
+        BranchStaffCreateEditDialog branchstaffdialog = branchstaffpage.clickCreateBranchBtn();
+        branchstaffdialog.setBranchName("Santa Cruz");
+        branchstaffdialog.setBranchCode("1002");
+        BranchStaffPage branchstaffpage2 = branchstaffdialog.clickSave();
+        BranchStaffViewPage branchstaffviewpage = branchstaffpage2.viewBranchOrStaff("Santa Cruz");
+        String actual = branchstaffviewpage.getName();
+        String expected = "Santa Cruz";
+        branchstaffviewpage.clickBack();
+        Assert.assertEquals(actual,expected, "Error: Branch name incorrect.");
 
 
-        // BranchViewPage xx = y.viewBranch("Cupertino");
-        // System.out.println(xx.getBranchName());
-        // System.out.println(xx.getBranchCode());
-        // xx.clickBack();
+    }
 
-        // BranchDeleteConfirmationDialog yy = y.deleteBranch("Santa Clara");
-        // System.out.println(yy.getBranchDeleteConfirmMsg());
-        // yy.clickDelete();
-        // BranchCreateEditDialog y2 = y.clickCreateBranchButton();
-        //y2.setBranchName("Santa Clara");
-        // y2.setBranchCode("7021");
-        // y2.clickSave();
-        // y.searchBranch("Cupertino");
-        // y.clickSearchButton();
-        // y.viewBranch("Cupertino");
-        // if (x2.branchExists("Cupertino")){
-        //      x2.viewBranch("Palo Alto");
-        // }
-        // Assert.assertTrue(mypage.loginBad(),"Fail: Login was suppose to fail and it did not.");
+
+    @Test(description="Testing branch search.")
+    public void searchBranchTest1() {
+        driver.get(baseUrl);
+        HomePage homepage = new HomePage(driver);
+        LoginPage loginpage = homepage.clickLoginLink();
+        loginpage.typeUsername("admin");
+        loginpage.typePassword("admin");
+        loginpage.checkAutomaticLogin(true);
+        HomePage homepage2 = loginpage.submitValidLogin();
+        BranchStaffPage branchstaffpage = (BranchStaffPage)homepage2.selectEntitiesDropDown("Branch");
+        BranchStaffCreateEditDialog branchstaffdialog = branchstaffpage.clickCreateBranchBtn();
+        branchstaffdialog.setBranchName("Santa Cruz");
+        branchstaffdialog.setBranchCode("1002");
+        BranchStaffPage branchstaffpage2 = branchstaffdialog.clickSave();
+        BranchStaffPage branchstaffpage3 = branchstaffpage2.searchBranch("Santa");
+        BranchStaffPage branchstaffpage4 = branchstaffpage3.clickSearchBtn();
+        boolean actual = branchstaffpage4.branchOrStaffExists("Santa");
+        Assert.assertEquals(actual,true,"Search: Did not find branch.");
 
     }
 

@@ -31,6 +31,7 @@ public class Select_Browser {
                 System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
             }
             else{
+                System.out.println("TEst");
                 File file = new File("src/main/resources/drivers/geckodriver");
                 System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
             }

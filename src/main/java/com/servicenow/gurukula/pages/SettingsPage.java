@@ -17,10 +17,6 @@ public class SettingsPage extends GurukulaPage {
             e.printStackTrace();
         }
 
-        /*
-        if (!driver.getCurrentUrl().contains("login")) {
-            throw new IllegalStateException("Error: not on the gurukula login page");
-        }
-        */
+
     }
 }

@@ -78,10 +78,10 @@ public class GurukulaPage {
         switch (menuItem) {
             case "Branch":
                 driver.findElement(menuitem_Branch).click();
-                return new BranchPage(driver);
+                return new BranchStaffPage(driver);
             case "Staff":
                 driver.findElement(menuitem_Staff).click();
-                return new StaffPage(driver);
+                return new BranchStaffPage(driver);
             default:
                 System.out.println("Invalid Entities dropdown menu item: " + menuItem);
 
